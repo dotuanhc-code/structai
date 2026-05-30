@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StructAI — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080a09;--s1:#0f1210;--s2:#161a16;--s3:#1e231e;
+  --border:#2a302a;--green:#22c55e;--green2:#16a34a;--greendim:#166534;
+  --yellow:#eab308;--red:#ef4444;--blue:#3b82f6;--text:#e2e8e2;--muted:#4b5e4b;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--display:'Bebas Neue',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 0%,rgba(34,197,94,0.08) 0%,transparent 60%);}
+.login-box{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:40px;width:360px;text-align:center;}
+.login-logo{font-family:var(--display);font-size:32px;letter-spacing:4px;color:var(--green);margin-bottom:4px;}
+.login-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:32px;}
+.login-box input{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:var(--mono);font-size:14px;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
+.login-box input:focus{border-color:var(--green);}
+.login-btn{width:100%;padding:13px;background:var(--green);color:#080a09;border:none;border-radius:8px;font-family:var(--display);font-size:18px;letter-spacing:2px;cursor:pointer;transition:all 0.2s;}
+.login-btn:hover{background:#4ade80;}
+.login-err{color:var(--red);font-size:12px;margin-top:10px;font-family:var(--mono);display:none;}
+
+/* APP */
+.app{display:none;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:220px;background:var(--s1);border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;position:fixed;height:100vh;overflow-y:auto;}
+.sb-logo{padding:0 20px 24px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.sb-logo-text{font-family:var(--display);font-size:22px;letter-spacing:3px;color:var(--green);}
+.sb-logo-sub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;}
+.sb-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:all 0.2s;border-left:2px solid transparent;}
+.sb-nav a:hover{color:var(--text);background:var(--s2);}
+.sb-nav a.active{color:var(--green);border-left-color:var(--green);background:rgba(34,197,94,0.06);}
+.sb-footer{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;border-top:1px solid var(--border);}
+.sb-user{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.sb-logout{margin-top:6px;background:none;border:none;color:var(--red);font-family:var(--mono);font-size:11px;cursor:pointer;}
+.main{margin-left:220px;padding:32px;flex:1;}
+.page{display:none;}.page.active{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.page-header{margin-bottom:28px;}
+.page-title{font-family:var(--display);font-size:28px;letter-spacing:2px;}
+.page-desc{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
+.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-card.green::before{background:var(--green);}
+.stat-card.yellow::before{background:var(--yellow);}
+.stat-card.red::before{background:var(--red);}
+.stat-card.blue::before{background:var(--blue);}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.stat-value{font-family:var(--display);font-size:32px;letter-spacing:1px;line-height:1;}
+.stat-card.green .stat-value{color:var(--green);}
+.stat-card.yellow .stat-value{color:var(--yellow);}
+.stat-card.red .stat-value{color:var(--red);}
+.stat-card.blue .stat-value{color:var(--blue);}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* CARD */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--s2);}
+.card-title{font-family:var(--display);font-size:16px;letter-spacing:1.5px;}
+.card-body{padding:20px;}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:6px;font-family:var(--mono);font-size:11px;letter-spacing:1px;cursor:pointer;border:1px solid;transition:all 0.2s;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;}
+.btn-green{background:var(--green);color:#080a09;border-color:var(--green);}
+.btn-green:hover{background:#4ade80;}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--border);}
+.btn-outline:hover{border-color:var(--green);color:var(--green);}
+.btn-red{background:transparent;color:var(--red);border-color:rgba(239,68,68,0.3);}
+.btn-red:hover{background:rgba(239,68,68,0.1);}
+.btn-sm{padding:5px 10px;font-size:10px;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--green);}
+.form-group select option{background:var(--s2);}
+.form-full{grid-column:1/-1;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{padding:10px 14px;text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--s2);}
+.tbl td{padding:12px 14px;border-bottom:1px solid rgba(42,48,42,0.4);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(34,197,94,0.02);}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:500;}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;}
+.badge-active{background:rgba(34,197,94,0.12);color:var(--green);}
+.badge-active::before{background:var(--green);}
+.badge-expired{background:rgba(239,68,68,0.12);color:var(--red);}
+.badge-expired::before{background:var(--red);}
+.badge-pending{background:rgba(234,179,8,0.12);color:var(--yellow);}
+.badge-pending::before{background:var(--yellow);}
+.badge-locked{background:rgba(107,114,128,0.12);color:#6b7280;}
+.badge-locked::before{background:#6b7280;}
+.plan{padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:10px;}
+.plan-free{background:rgba(75,94,75,0.3);color:var(--muted);}
+.plan-pro{background:rgba(59,130,246,0.15);color:var(--blue);}
+.plan-biz{background:rgba(234,179,8,0.15);color:var(--yellow);}
+.key-code{font-family:var(--mono);font-size:12px;color:var(--green);background:rgba(34,197,94,0.08);padding:3px 8px;border-radius:4px;letter-spacing:1px;cursor:pointer;}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:28px;width:500px;max-width:90vw;animation:fadeIn 0.2s ease;}
+.modal-title{font-family:var(--display);font-size:20px;letter-spacing:2px;margin-bottom:20px;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+
+/* NOTIFY */
+.notify{position:fixed;top:20px;right:20px;padding:12px 20px;background:var(--s2);border:1px solid var(--green);border-radius:8px;font-family:var(--mono);font-size:12px;color:var(--green);z-index:200;display:none;animation:slideIn 0.3s ease;}
+@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* LOADING */
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;}
+.loading-overlay.show{display:flex;}
+.loading-box{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:24px 32px;text-align:center;font-family:var(--mono);font-size:13px;color:var(--green);}
+.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SEARCH */
+.search-row{display:flex;gap:10px;margin-bottom:16px;}
+.search-input{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:9px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;}
+.search-input:focus{border-color:var(--green);}
+
+/* USAGE */
+.usage-wrap{display:flex;align-items:center;gap:8px;}
+.usage-track{width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.usage-fill{height:100%;border-radius:2px;background:var(--green);}
+.usage-fill.warn{background:var(--yellow);}
+.usage-fill.over{background:var(--red);}
+
+@media(max-width:768px){
+  .sidebar{width:60px;}
+  .sb-logo,.sb-nav a span,.sb-footer .sb-user{display:none;}
+  .main{margin-left:60px;padding:16px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .form-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="notify" id="notify"></div>
+<div class="loading-overlay" id="loading"><div class="loading-box"><div class="spinner"></div>Đang xử lý...</div></div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">STRUCTAI</div>
+    <div class="login-sub">ADMIN DASHBOARD</div>
+    <input type="text" id="login-user" placeholder="Tên đăng nhập" />
+    <input type="password" id="login-pass" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="login-btn" onclick="doLogin()">ĐĂNG NHẬP</button>
+    <div class="login-err" id="login-err">Sai tên đăng nhập hoặc mật khẩu</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-text">STRUCTAI</div>
+        <div class="sb-logo-sub">ADMIN PANEL</div>
+      </div>
+      <nav class="sb-nav">
+        <a href="#" class="active" onclick="showPage('dashboard',this)"><span>📊</span><span>Dashboard</span></a>
+        <a href="#" onclick="showPage('licenses',this)"><span>🔑</span><span>License Keys</span></a>
+        <a href="#" onclick="showPage('customers',this)"><span>👥</span><span>Khách hàng</span></a>
+        <a href="#" onclick="showPage('revenue',this)"><span>💰</span><span>Doanh thu</span></a>
+        <a href="#" onclick="showPage('settings',this)"><span>⚙️</span><span>Cài đặt</span></a>
+      </nav>
+      <div class="sb-footer">
+        <div class="sb-user">admin</div>
+        <button class="sb-logout" onclick="doLogout()">← Đăng xuất</button>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-title">DASHBOARD</div>
+          <div class="page-desc">TỔNG QUAN HỆ THỐNG — DỮ LIỆU TỪ SUPABASE CLOUD</div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card green"><div class="stat-label">Đang hoạt động</div><div class="stat-value" id="stat-active">—</div><div class="stat-sub">license keys</div></div>
+          <div class="stat-card yellow"><div class="stat-label">Sắp hết hạn</div><div class="stat-value" id="stat-expiring">—</div><div class="stat-sub">trong 7 ngày</div></div>
+          <div class="stat-card red"><div class="stat-label">Đã hết hạn</div><div class="stat-value" id="stat-expired">—</div><div class="stat-sub">keys</div></div>
+          <div class="stat-card blue"><div class="stat-label">Doanh thu tháng</div><div class="stat-value" id="stat-revenue">—</div><div class="stat-sub">VNĐ</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">KEY GẦN ĐÂY</div></div>
+            <div class="card-body" id="recent-licenses" style="font-family:var(--mono);font-size:12px;line-height:2;color:var(--muted);">Đang tải...</div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">THANH TOÁN GẦN ĐÂY</div></div>
+            <div class="card-body" id="recent-payments" style="font-family:var(--mono);font-size:12px;line-height:2;color:var(--muted);">Đang tải...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LICENSES -->
+      <div class="page" id="page-licenses">
+        <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;">
+          <div><div class="page-title">LICENSE KEYS</div><div class="page-desc">QUẢN LÝ TẤT CẢ KEY — LƯU TRÊN SUPABASE CLOUD</div></div>
+          <button class="btn btn-green" onclick="openCreateModal()">+ TẠO KEY MỚI</button>
+        </div>
+        <div class="search-row">
+          <input class="search-input" placeholder="🔍 Tìm key, tên, email..." id="lic-search" oninput="renderLicenses()">
+          <select class="search-input" style="flex:0;width:180px;" id="lic-filter" onchange="renderLicenses()">
+            <option value="">Tất cả trạng thái</option>
+            <option value="active">Đang hoạt động</option>
+            <option value="expired">Hết hạn</option>
+            <option value="locked">Đã khoá</option>
+          </select>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <thead><tr><th>License Key</th><th>Khách hàng</th><th>Gói</th><th>Hết hạn</th><th>Lượt dùng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody id="license-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REVENUE -->
+      <div class="page" id="page-revenue">
+        <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;">
+          <div><div class="page-title">DOANH THU</div><div class="page-desc">LỊCH SỬ THANH TOÁN</div></div>
+          <button class="btn btn-green" onclick="openPaymentModal()">+ GHI THANH TOÁN</button>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card green"><div class="stat-label">Tháng này</div><div class="stat-value" id="rev-month">—</div><div class="stat-sub">VNĐ</div></div>
+          <div class="stat-card blue"><div class="stat-label">Tháng trước</div><div class="stat-value" id="rev-last">—</div><div class="stat-sub">VNĐ</div></div>
+          <div class="stat-card yellow"><div class="stat-label">Tổng cộng</div><div class="stat-value" id="rev-total">—</div><div class="stat-sub">VNĐ</div></div>
+          <div class="stat-card green"><div class="stat-label">Số giao dịch</div><div class="stat-value" id="rev-count">—</div><div class="stat-sub">giao dịch</div></div>
+        </div>
+        <div class="card">
+          <table class="tbl">
+            <thead><tr><th>Ngày</th><th>Khách hàng</th><th>Gói</th><th>Số tiền</th><th>Phương thức</th><th>Ghi chú</th></tr></thead>
+            <tbody id="payment-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS -->
+      <div class="page" id="page-customers">
+        <div class="page-header"><div class="page-title">KHÁCH HÀNG</div><div class="page-desc">DANH SÁCH TỪ LICENSE KEYS</div></div>
+        <div class="card">
+          <table class="tbl">
+            <thead><tr><th>Tên</th><th>Công ty</th><th>Email / SĐT</th><th>Gói</th><th>Hết hạn</th><th>Lượt dùng</th></tr></thead>
+            <tbody id="customer-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page" id="page-settings">
+        <div class="page-header"><div class="page-title">CÀI ĐẶT</div></div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">TÀI KHOẢN ADMIN</div></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-group"><label>Tên đăng nhập</label><input type="text" id="set-user" value="admin"></div>
+              <div class="form-group"><label>Mật khẩu mới</label><input type="password" id="set-pass" placeholder="Để trống nếu không đổi"></div>
+            </div>
+            <div style="margin-top:16px;"><button class="btn btn-green" onclick="saveAccount()">LƯU TÀI KHOẢN</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">XUẤT DỮ LIỆU</div></div>
+          <div class="card-body" style="display:flex;gap:12px;">
+            <button class="btn btn-outline" onclick="exportCSV()">📊 Xuất Excel CSV</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tạo key -->
+<div class="modal-bg" id="modal-create">
+  <div class="modal">
+    <div class="modal-title">TẠO LICENSE KEY MỚI</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Tên khách hàng *</label><input type="text" id="new-name" placeholder="Nguyễn Văn A"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="new-email" placeholder="email@example.com"></div>
+      <div class="form-group"><label>Số điện thoại</label><input type="text" id="new-phone" placeholder="0901234567"></div>
+      <div class="form-group"><label>Công ty</label><input type="text" id="new-company" placeholder="Công ty XD ABC"></div>
+      <div class="form-group"><label>Gói dịch vụ</label>
+        <select id="new-plan">
+          <option value="free">Free (3 lượt/tháng)</option>
+          <option value="pro" selected>Cá nhân 199k (100 lượt/tháng)</option>
+          <option value="biz">Doanh nghiệp 999k (không giới hạn)</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Thời hạn</label>
+        <select id="new-duration">
+          <option value="1">1 tháng</option>
+          <option value="3">3 tháng</option>
+          <option value="6">6 tháng</option>
+          <option value="12">12 tháng</option>
+        </select>
+      </div>
+      <div class="form-group form-full"><label>Ghi chú</label><input type="text" id="new-note" placeholder="Ghi chú thêm..."></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-create')">Huỷ</button>
+      <button class="btn btn-green" onclick="createLicense()">TẠO KEY & LƯU</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ghi thanh toán -->
+<div class="modal-bg" id="modal-payment">
+  <div class="modal">
+    <div class="modal-title">GHI THANH TOÁN</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Khách hàng</label><input type="text" id="p-customer"></div>
+      <div class="form-group"><label>Số tiền (VNĐ)</label><input type="number" id="p-amount" placeholder="199000"></div>
+      <div class="form-group"><label>Gói</label><select id="p-plan"><option>Cá nhân</option><option>Doanh nghiệp</option></select></div>
+      <div class="form-group"><label>Phương thức</label><select id="p-method"><option>Chuyển khoản</option><option>MoMo</option><option>ZaloPay</option><option>Tiền mặt</option></select></div>
+      <div class="form-group form-full"><label>Ghi chú</label><input type="text" id="p-note"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-payment')">Huỷ</button>
+      <button class="btn btn-green" onclick="savePayment()">LƯU THANH TOÁN</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE CONFIG ──────────────────────────────────
+const SB_URL = 'https://bfnitiucjplvikrhquve.supabase.co';
+const SB_KEY = 'sb_publishable_4s4iDDgJGQ91f1PHsloO_Q_Dz_6WBT4';
+
+async function sbFetch(path, method='GET', body=null) {
+  const opts = {
+    method,
+    headers: { 'Content-Type':'application/json', 'apikey':SB_KEY, 'Authorization':'Bearer '+SB_KEY, 'Prefer':'return=representation' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(SB_URL+'/rest/v1/'+path, opts);
+  if (!r.ok) { const e=await r.text(); throw new Error(e); }
+  const txt = await r.text();
+  return txt ? JSON.parse(txt) : [];
+}
+
+// ── ADMIN AUTH ───────────────────────────────────────
+const ADMIN = { user:'admin', pass:'admin123' };
+
+function doLogin() {
+  const u=document.getElementById('login-user').value;
+  const p=document.getElementById('login-pass').value;
+  const saved = JSON.parse(localStorage.getItem('sai_admin')||'null') || ADMIN;
+  if (u===saved.user && p===saved.pass) {
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    loadAll();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+function doLogout() {
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+}
+
+// ── NAV ──────────────────────────────────────────────
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name==='licenses') renderLicenses();
+  if(name==='customers') renderCustomers();
+  if(name==='revenue') renderRevenue();
+  if(name==='dashboard') renderDashboard();
+}
+
+// ── CACHE ────────────────────────────────────────────
+let _licenses=[], _payments=[];
+
+async function loadAll() {
+  showLoading(true);
+  try {
+    _licenses = await sbFetch('licenses?order=created_at.desc') || [];
+    _payments = await sbFetch('payments?order=created_at.desc') || [];
+    // Auto expire
+    const now = new Date();
+    _licenses.forEach(l => { if(l.status==='active' && new Date(l.expiry)<now) l.status='expired'; });
+    renderDashboard();
+  } catch(e) {
+    notify('❌ Lỗi kết nối Supabase: '+e.message);
+  }
+  showLoading(false);
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+function renderDashboard() {
+  const now = new Date();
+  const active = _licenses.filter(l=>l.status==='active').length;
+  const expired = _licenses.filter(l=>l.status==='expired').length;
+  const expiring = _licenses.filter(l=>{
+    if(l.status!=='active') return false;
+    const d=(new Date(l.expiry)-now)/86400000;
+    return d>0 && d<=7;
+  }).length;
+  const thisM = _payments.filter(p=>{
+    const d=new Date(p.created_at);
+    return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+  }).reduce((s,p)=>s+(p.amount||0),0);
+
+  document.getElementById('stat-active').textContent=active;
+  document.getElementById('stat-expiring').textContent=expiring;
+  document.getElementById('stat-expired').textContent=expired;
+  document.getElementById('stat-revenue').textContent=fmt3(thisM)+'đ';
+
+  document.getElementById('recent-licenses').innerHTML = _licenses.slice(0,5).map(l=>
+    `<div style="display:flex;justify-content:space-between;"><span style="color:var(--green)">▸ ${l.key}</span><span>${l.name}</span></div>`
+  ).join('') || '<span>Chưa có key nào</span>';
+
+  document.getElementById('recent-payments').innerHTML = _payments.slice(0,5).map(p=>
+    `<div style="display:flex;justify-content:space-between;"><span>${p.customer}</span><span style="color:var(--green)">${fmt3(p.amount)}đ</span></div>`
+  ).join('') || '<span>Chưa có thanh toán</span>';
+}
+
+// ── LICENSES ─────────────────────────────────────────
+function genKey(plan) {
+  const pre={free:'SF',pro:'SP',biz:'SB'}[plan]||'SK';
+  const r=()=>Math.random().toString(36).substring(2,6).toUpperCase();
+  return `${pre}-${r()}-${r()}-${r()}`;
+}
+
+function renderLicenses() {
+  const q=(document.getElementById('lic-search')||{value:''}).value.toLowerCase();
+  const sf=(document.getElementById('lic-filter')||{value:''}).value;
+  const now=new Date();
+  const filtered=_licenses.filter(l=>{
+    const mq=!q||l.key.toLowerCase().includes(q)||l.name.toLowerCase().includes(q)||(l.email||'').toLowerCase().includes(q);
+    const ms=!sf||l.status===sf;
+    return mq&&ms;
+  });
+  const tbody=document.getElementById('license-tbody');
+  const planL={free:'Free',pro:'Cá nhân',biz:'DN'};
+  const planC={free:'plan-free',pro:'plan-pro',biz:'plan-biz'};
+  const stL={active:'Hoạt động',expired:'Hết hạn',locked:'Khoá',pending:'Chờ KH'};
+  const stC={active:'badge-active',expired:'badge-expired',locked:'badge-locked',pending:'badge-pending'};
+  tbody.innerHTML=filtered.length?filtered.map(l=>{
+    const days=Math.ceil((new Date(l.expiry)-now)/86400000);
+    const pct=l.limit_count?(l.used||0)/l.limit_count*100:0;
+    const uc=pct>90?'over':pct>70?'warn':'';
+    return `<tr>
+      <td><span class="key-code" onclick="cpKey('${l.key}')">${l.key}</span></td>
+      <td><div style="font-weight:500">${l.name}</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted)">${l.company||''}</div></td>
+      <td><span class="plan ${planC[l.plan]||'plan-free'}">${planL[l.plan]||l.plan}</span></td>
+      <td><div style="font-family:var(--mono);font-size:12px">${new Date(l.expiry).toLocaleDateString('vi')}</div>
+          <div style="font-size:10px;color:${days<0?'var(--red)':days<=7?'var(--yellow)':'var(--muted)'}">${days<0?'Hết hạn':days+'ngày còn'}</div></td>
+      <td><div class="usage-wrap"><div class="usage-track"><div class="usage-fill ${uc}" style="width:${Math.min(100,pct)}%"></div></div>
+          <span style="font-family:var(--mono);font-size:10px">${l.used||0}/${l.limit_count||'∞'}</span></div></td>
+      <td><span class="badge ${stC[l.status]||'badge-pending'}">${stL[l.status]||l.status}</span></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="renewLic('${l.id}')">Gia hạn</button>
+        <button class="btn btn-outline btn-sm" onclick="toggleLock('${l.id}','${l.status}')">${l.status==='locked'?'Mở':'Khoá'}</button>
+        <button class="btn btn-red btn-sm" onclick="deleteLic('${l.id}')">Xoá</button>
+      </td>
+    </tr>`;
+  }).join(''):`<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted);font-family:var(--mono)">Chưa có license key nào</td></tr>`;
+}
+
+function openCreateModal(){document.getElementById('modal-create').classList.add('open');}
+
+async function createLicense() {
+  const name=document.getElementById('new-name').value.trim();
+  if(!name){alert('Nhập tên khách hàng!');return;}
+  const plan=document.getElementById('new-plan').value;
+  const dur=parseInt(document.getElementById('new-duration').value);
+  const limitMap={free:3,pro:100,biz:99999};
+  const expiry=new Date(); expiry.setMonth(expiry.getMonth()+dur);
+  const lic={
+    key:genKey(plan), name, email:document.getElementById('new-email').value,
+    phone:document.getElementById('new-phone').value, company:document.getElementById('new-company').value,
+    plan, status:'active', expiry:expiry.toISOString(), used:0,
+    limit_count:limitMap[plan], note:document.getElementById('new-note').value
+  };
+  showLoading(true);
+  try {
+    const res=await sbFetch('licenses','POST',lic);
+    _licenses.unshift(res[0]||lic);
+    closeModal('modal-create');
+    notify('✓ Đã tạo key: '+lic.key);
+    renderLicenses(); renderDashboard();
+    ['new-name','new-email','new-phone','new-company','new-note'].forEach(id=>document.getElementById(id).value='');
+  } catch(e){notify('❌ Lỗi: '+e.message);}
+  showLoading(false);
+}
+
+async function renewLic(id) {
+  const months=parseInt(prompt('Gia hạn bao nhiêu tháng?','1'));
+  if(!months||isNaN(months))return;
+  const l=_licenses.find(x=>x.id===id); if(!l)return;
+  const base=new Date(l.expiry)>new Date()?new Date(l.expiry):new Date();
+  base.setMonth(base.getMonth()+months);
+  showLoading(true);
+  try {
+    await sbFetch(`licenses?id=eq.${id}`,'PATCH',{expiry:base.toISOString(),status:'active'});
+    l.expiry=base.toISOString(); l.status='active';
+    notify('✓ Đã gia hạn '+months+' tháng');
+    renderLicenses(); renderDashboard();
+  } catch(e){notify('❌ Lỗi: '+e.message);}
+  showLoading(false);
+}
+
+async function toggleLock(id,status) {
+  const ns=status==='locked'?'active':'locked';
+  showLoading(true);
+  try {
+    await sbFetch(`licenses?id=eq.${id}`,'PATCH',{status:ns});
+    const l=_licenses.find(x=>x.id===id); if(l)l.status=ns;
+    notify(ns==='locked'?'🔒 Đã khoá key':'🔓 Đã mở khoá key');
+    renderLicenses();
+  } catch(e){notify('❌ Lỗi: '+e.message);}
+  showLoading(false);
+}
+
+async function deleteLic(id) {
+  if(!confirm('Xoá license key này?'))return;
+  showLoading(true);
+  try {
+    await sbFetch(`licenses?id=eq.${id}`,'DELETE');
+    _licenses=_licenses.filter(x=>x.id!==id);
+    notify('🗑 Đã xoá key');
+    renderLicenses(); renderDashboard();
+  } catch(e){notify('❌ Lỗi: '+e.message);}
+  showLoading(false);
+}
+
+function cpKey(key){navigator.clipboard.writeText(key).then(()=>notify('✓ Đã copy: '+key));}
+
+// ── CUSTOMERS ────────────────────────────────────────
+function renderCustomers() {
+  const tbody=document.getElementById('customer-tbody');
+  const planL={free:'Free',pro:'Cá nhân',biz:'DN'};
+  const planC={free:'plan-free',pro:'plan-pro',biz:'plan-biz'};
+  tbody.innerHTML=_licenses.length?_licenses.map(l=>`
+    <tr>
+      <td style="font-weight:500">${l.name}</td>
+      <td style="color:var(--muted)">${l.company||'—'}</td>
+      <td><div style="font-family:var(--mono);font-size:12px">${l.email||'—'}</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">${l.phone||''}</div></td>
+      <td><span class="plan ${planC[l.plan]||'plan-free'}">${planL[l.plan]||'—'}</span></td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">${new Date(l.expiry).toLocaleDateString('vi')}</td>
+      <td style="font-family:var(--mono);font-size:12px">${l.used||0}/${l.limit_count||'∞'}</td>
+    </tr>
+  `).join(''):`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted);font-family:var(--mono)">Chưa có khách hàng</td></tr>`;
+}
+
+// ── REVENUE ──────────────────────────────────────────
+function renderRevenue() {
+  const now=new Date();
+  const thisM=_payments.filter(p=>{const d=new Date(p.created_at);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).reduce((s,p)=>s+(p.amount||0),0);
+  const lm=new Date(now.getFullYear(),now.getMonth()-1,1);
+  const lastM=_payments.filter(p=>{const d=new Date(p.created_at);return d.getMonth()===lm.getMonth()&&d.getFullYear()===lm.getFullYear();}).reduce((s,p)=>s+(p.amount||0),0);
+  const total=_payments.reduce((s,p)=>s+(p.amount||0),0);
+  document.getElementById('rev-month').textContent=fmt3(thisM)+'đ';
+  document.getElementById('rev-last').textContent=fmt3(lastM)+'đ';
+  document.getElementById('rev-total').textContent=fmt3(total)+'đ';
+  document.getElementById('rev-count').textContent=_payments.length;
+  const tbody=document.getElementById('payment-tbody');
+  tbody.innerHTML=_payments.length?_payments.map(p=>`
+    <tr>
+      <td style="font-family:var(--mono);font-size:12px">${new Date(p.created_at).toLocaleDateString('vi')}</td>
+      <td style="font-weight:500">${p.customer}</td>
+      <td><span class="plan plan-pro">${p.plan||'—'}</span></td>
+      <td style="font-family:var(--mono);color:var(--green)">${fmt3(p.amount)}đ</td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">${p.method||'—'}</td>
+      <td style="color:var(--muted);font-size:12px">${p.note||'—'}</td>
+    </tr>
+  `).join(''):`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted);font-family:var(--mono)">Chưa có thanh toán nào</td></tr>`;
+}
+
+function openPaymentModal(){document.getElementById('modal-payment').classList.add('open');}
+
+async function savePayment() {
+  const customer=document.getElementById('p-customer').value.trim();
+  const amount=parseInt(document.getElementById('p-amount').value);
+  if(!customer||!amount){alert('Nhập đầy đủ thông tin!');return;}
+  const pay={customer,amount,plan:document.getElementById('p-plan').value,method:document.getElementById('p-method').value,note:document.getElementById('p-note').value};
+  showLoading(true);
+  try {
+    const res=await sbFetch('payments','POST',pay);
+    _payments.unshift(res[0]||pay);
+    closeModal('modal-payment');
+    notify('✓ Đã ghi thanh toán');
+    renderRevenue(); renderDashboard();
+    ['p-customer','p-amount','p-note'].forEach(id=>document.getElementById(id).value='');
+  } catch(e){notify('❌ Lỗi: '+e.message);}
+  showLoading(false);
+}
+
+// ── SETTINGS ─────────────────────────────────────────
+function saveAccount(){
+  const u=document.getElementById('set-user').value.trim();
+  const p=document.getElementById('set-pass').value;
+  const saved=JSON.parse(localStorage.getItem('sai_admin')||'null')||{user:'admin',pass:'admin123'};
+  if(u)saved.user=u; if(p)saved.pass=p;
+  localStorage.setItem('sai_admin',JSON.stringify(saved));
+  notify('✓ Đã cập nhật tài khoản');
+}
+
+async function exportCSV(){
+  const hd=['Key','Tên','Công ty','Email','SĐT','Gói','Hết hạn','Trạng thái','Đã dùng','Giới hạn'];
+  const rows=_licenses.map(l=>[l.key,l.name,l.company||'',l.email||'',l.phone||'',l.plan,new Date(l.expiry).toLocaleDateString('vi'),l.status,l.used||0,l.limit_count||0]);
+  const csv=[hd,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='structai-licenses-'+new Date().toLocaleDateString('vi').replace(/\//g,'-')+'.csv';a.click();
+}
+
+// ── HELPERS ──────────────────────────────────────────
+function fmt3(n){return Number(n||0).toLocaleString('vi-VN');}
+function notify(msg){const n=document.getElementById('notify');n.textContent=msg;n.style.display='block';setTimeout(()=>n.style.display='none',3000);}
+function showLoading(v){document.getElementById('loading').classList.toggle('show',v);}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+</script>
+</body>
+</html>

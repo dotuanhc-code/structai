@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0059)file:///C:/Users/HP/Downloads/structai-tool-supabase_1.html -->
+<html lang="vi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StructAI — Bóc Khối Lượng & Dự Toán</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>StructAI — Bóc Khối Lượng &amp; Dự Toán</title>
+<link href="./StructAI — Bóc Khối Lượng &amp; Dự Toán_files/css2" rel="stylesheet">
 <style>
 :root{--bg:#0b0c0b;--s1:#111311;--s2:#181a18;--s3:#1f221f;--border:#272b27;--green:#3ddc84;--green2:#2cb870;--greendim:#1a4d30;--yellow:#f5c842;--red:#ff5f5f;--blue:#5b9cf6;--text:#dfe8df;--muted:#4a5a4a;--mono:'JetBrains Mono',monospace;--body:'Nunito',sans-serif;--display:'Bebas Neue',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -166,14 +166,14 @@ select option{background:var(--s2);}
 <div class="lic" id="lic-screen">
   <div class="lic-box">
     <div class="lic-logo">STRUCTAI</div>
-    <div class="lic-tagline">BÓC KHỐI LƯỢNG & DỰ TOÁN</div>
+    <div class="lic-tagline">BÓC KHỐI LƯỢNG &amp; DỰ TOÁN</div>
     <div class="lic-badge">✦ CÔNG TRÌNH CÔNG NGHIỆP v3.0</div>
     <div class="lic-lbl">Nhập License Key</div>
-    <input class="lic-inp" id="lic-key" placeholder="SP-XXXX-XXXX-XXXX" maxlength="20" oninput="fmtKey(this)" onkeydown="if(event.key==='Enter')activate()">
+    <input class="lic-inp" id="lic-key" placeholder="SP-XXXX-XXXX-XXXX" maxlength="20" oninput="fmtKey(this)" onkeydown="if(event.key===&#39;Enter&#39;)activate()">
     <div class="lic-err" id="lic-err"></div>
     <button class="lic-btn" id="lic-btn" onclick="activate()">⚡ KÍCH HOẠT</button>
-    <div class="lic-note">Chưa có key? Liên hệ <a href="#">Zalo hỗ trợ</a> để đăng ký.<br>License chỉ hoạt động trên <strong style="color:var(--text)">1 thiết bị cố định</strong>.</div>
-    <div class="lic-fp"><div class="lic-fp-lbl">Mã thiết bị</div><div class="lic-fp-val" id="fp-val">—</div></div>
+    <div class="lic-note">Chưa có key? Liên hệ <a href="file:///C:/Users/HP/Downloads/structai-tool-supabase_1.html#">Zalo hỗ trợ</a> để đăng ký.<br>License chỉ hoạt động trên <strong style="color:var(--text)">1 thiết bị cố định</strong>.</div>
+    <div class="lic-fp"><div class="lic-fp-lbl">Mã thiết bị</div><div class="lic-fp-val" id="fp-val">629E638A</div></div>
   </div>
 </div>
 
@@ -183,7 +183,7 @@ select option{background:var(--s2);}
   <div class="hdr">
     <div class="brand">
       <div class="brand-icon">🏗️</div>
-      <div><div class="brand-name">StructAI</div><div class="brand-sub">BÓC KHỐI LƯỢNG & DỰ TOÁN THÔNG MINH</div></div>
+      <div><div class="brand-name">StructAI</div><div class="brand-sub">BÓC KHỐI LƯỢNG &amp; DỰ TOÁN THÔNG MINH</div></div>
     </div>
     <div class="hdr-right">
       <div class="chips" id="chips"></div>
@@ -193,14 +193,14 @@ select option{background:var(--s2);}
   </div>
   <div class="warn" id="warn"></div>
   <div class="tabs">
-    <button class="tab on" onclick="swTab('upload',0)">📁 Upload Bản Vẽ</button>
-    <button class="tab" onclick="swTab('manual',1)">✏️ Nhập Mô Tả</button>
+    <button class="tab on" onclick="swTab(&#39;upload&#39;,0)">📁 Upload Bản Vẽ</button>
+    <button class="tab" onclick="swTab(&#39;manual&#39;,1)">✏️ Nhập Mô Tả</button>
   </div>
 
   <!-- TAB UPLOAD -->
   <div class="panel on" id="tab-upload">
     <div class="fprev" id="fprev"><span id="ficon" style="font-size:26px">📄</span><div class="fi"><div class="fn" id="fname"></div><div class="fs" id="fsize"></div></div><button class="frm" onclick="rmFile()">✕</button></div>
-    <div class="upzone" id="uz" onclick="document.getElementById('fi').click()" ondragover="dg(event)" ondragleave="dl(event)" ondrop="dd(event)">
+    <div class="upzone" id="uz" onclick="document.getElementById(&#39;fi&#39;).click()" ondragover="dg(event)" ondragleave="dl(event)" ondrop="dd(event)">
       <div class="up-ico">📐</div>
       <div class="up-ttl">Kéo thả hoặc click để upload</div>
       <div class="up-dsc">Bản vẽ PDF vector hoặc ảnh chụp JPG/PNG<br>AI phân tích và bóc khối lượng tự động</div>
@@ -210,13 +210,13 @@ select option{background:var(--s2);}
     <div class="cfg">
       <div><label>Loại công trình</label><select id="ct"><option value="xuong-sx">Nhà xưởng sản xuất</option><option value="xuong-lap">Nhà xưởng lắp ráp</option><option value="kho-kho">Kho hàng khô</option><option value="kho-lanh">Kho lạnh</option><option value="kho-ngoai">Kho logistics</option></select></div>
       <div><label>Kết cấu chính</label><select id="kc"><option value="thep-tien-che">Khung thép tiền chế</option><option value="thep-truyen-thong">Khung thép truyền thống</option><option value="btct">Bê tông cốt thép</option><option value="hon-hop">Kết hợp thép+BTCT</option></select></div>
-      <div><label>Mức độ chi tiết</label><select id="detail"><option value="so-bo">Sơ bộ ±20%</option><option value="chuan" selected>Chuẩn ±10%</option><option value="chi-tiet">Chi tiết ±5%</option></select></div>
+      <div><label>Mức độ chi tiết</label><select id="detail"><option value="so-bo">Sơ bộ ±20%</option><option value="chuan" selected="">Chuẩn ±10%</option><option value="chi-tiet">Chi tiết ±5%</option></select></div>
     </div>
     <div class="region-row">
-      <div><label>Khu vực</label><select id="region"><option value="hn">Hà Nội & miền Bắc</option><option value="hcm" selected>HCM & miền Nam</option><option value="mien-trung">Miền Trung</option><option value="tay-nguyen">Tây Nguyên</option></select></div>
-      <div><label>Năm dự toán</label><select id="year"><option value="2024">2024</option><option value="2025" selected>2025</option><option value="2026">2026</option></select></div>
+      <div><label>Khu vực</label><select id="region"><option value="hn">Hà Nội &amp; miền Bắc</option><option value="hcm" selected="">HCM &amp; miền Nam</option><option value="mien-trung">Miền Trung</option><option value="tay-nguyen">Tây Nguyên</option></select></div>
+      <div><label>Năm dự toán</label><select id="year"><option value="2024">2024</option><option value="2025" selected="">2025</option><option value="2026">2026</option></select></div>
     </div>
-    <button class="btn-run" id="btn1" onclick="run1()">⚡ PHÂN TÍCH & BÓC KHỐI LƯỢNG</button>
+    <button class="btn-run" id="btn1" onclick="run1()">⚡ PHÂN TÍCH &amp; BÓC KHỐI LƯỢNG</button>
     <div class="err" id="err1"></div>
     <div class="prog" id="prog1">
       <div class="ps" id="s1"><div class="pdot"></div>Đọc và nhận diện bản vẽ...</div>
@@ -227,11 +227,11 @@ select option{background:var(--s2);}
       <div class="ps" id="s6"><div class="pdot"></div>Xuất bảng kết quả hoàn chỉnh...</div>
     </div>
     <div class="res" id="res1">
-      <div class="res-hdr"><div class="res-ttl">📊 KẾT QUẢ BÓC KHỐI LƯỢNG</div><div style="display:flex;gap:8px"><button class="btn-sm" onclick="cpTbl('tb1')">📋 Copy</button><button class="btn-sm pri" onclick="exXL(1)">📥 Xuất Excel</button></div></div>
+      <div class="res-hdr"><div class="res-ttl">📊 KẾT QUẢ BÓC KHỐI LƯỢNG</div><div style="display:flex;gap:8px"><button class="btn-sm" onclick="cpTbl(&#39;tb1&#39;)">📋 Copy</button><button class="btn-sm pri" onclick="exXL(1)">📥 Xuất Excel</button></div></div>
       <div class="sumgrid" id="sg1"></div>
       <div class="costbox" id="cb1"></div>
       <div class="tblwrap"><table class="tbl"><thead><tr><th>STT</th><th>Hạng mục</th><th>Danh mục</th><th>Thông số KT</th><th>Khối lượng</th><th>ĐV</th><th>Đ.giá VL</th><th>Đ.giá NC</th><th>Thành tiền</th><th>Tin cậy</th></tr></thead><tbody id="tb1"></tbody></table></div>
-      <div class="noteslbl">⚠ LƯU Ý & KIẾN NGHỊ</div><div class="notesbox" id="nb1"></div>
+      <div class="noteslbl">⚠ LƯU Ý &amp; KIẾN NGHỊ</div><div class="notesbox" id="nb1"></div>
     </div>
   </div>
 
@@ -239,18 +239,19 @@ select option{background:var(--s2);}
   <div class="panel" id="tab-manual">
     <div style="background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;">
       <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Mô tả công trình</div>
-      <textarea id="mdesc" rows="7" placeholder="Nhập thông số càng chi tiết càng chính xác...&#10;VD: Nhà xưởng sản xuất khung thép tiền chế, 60x120m, cao 9m, bước cột 6m ngang 12m dọc. Cột I300x150x8x12, xà gồ mái Z200x70x20x3 @1.5m, xà gồ tường C150. Mái tôn cách nhiệt 75mm, tường tôn 50mm. Nền BTCT M300 dày 200mm lưới D8a200. Móng cọc D400 sâu 12m. Cửa công nghiệp 4x4m (6 cái)..." style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:14px;color:var(--text);font-size:14px;resize:vertical;outline:none;line-height:1.8;width:100%;font-family:var(--body);" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <textarea id="mdesc" rows="7" placeholder="Nhập thông số càng chi tiết càng chính xác...
+VD: Nhà xưởng sản xuất khung thép tiền chế, 60x120m, cao 9m, bước cột 6m ngang 12m dọc. Cột I300x150x8x12, xà gồ mái Z200x70x20x3 @1.5m, xà gồ tường C150. Mái tôn cách nhiệt 75mm, tường tôn 50mm. Nền BTCT M300 dày 200mm lưới D8a200. Móng cọc D400 sâu 12m. Cửa công nghiệp 4x4m (6 cái)..." style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:14px;color:var(--text);font-size:14px;resize:vertical;outline:none;line-height:1.8;width:100%;font-family:var(--body);" onfocus="this.style.borderColor=&#39;var(--green)&#39;" onblur="this.style.borderColor=&#39;var(--border)&#39;"></textarea>
     </div>
     <div class="cfg">
       <div><label>Loại công trình</label><select id="m-ct"><option>Nhà xưởng sản xuất</option><option>Nhà xưởng lắp ráp</option><option>Kho hàng khô</option><option>Kho lạnh</option><option>Kho logistics</option></select></div>
       <div><label>Kết cấu</label><select id="m-kc"><option>Khung thép tiền chế</option><option>Khung thép truyền thống</option><option>Bê tông cốt thép</option><option>Kết hợp</option></select></div>
-      <div><label>Mức chi tiết</label><select id="m-detail"><option>Sơ bộ (nhanh)</option><option selected>Chuẩn</option><option>Chi tiết đầy đủ</option></select></div>
+      <div><label>Mức chi tiết</label><select id="m-detail"><option>Sơ bộ (nhanh)</option><option selected="">Chuẩn</option><option>Chi tiết đầy đủ</option></select></div>
     </div>
     <div class="region-row">
-      <div><label>Khu vực</label><select id="m-region"><option value="hn">Hà Nội & miền Bắc</option><option value="hcm" selected>HCM & miền Nam</option><option value="mien-trung">Miền Trung</option><option value="tay-nguyen">Tây Nguyên</option></select></div>
-      <div><label>Năm dự toán</label><select id="m-year"><option value="2024">2024</option><option value="2025" selected>2025</option><option value="2026">2026</option></select></div>
+      <div><label>Khu vực</label><select id="m-region"><option value="hn">Hà Nội &amp; miền Bắc</option><option value="hcm" selected="">HCM &amp; miền Nam</option><option value="mien-trung">Miền Trung</option><option value="tay-nguyen">Tây Nguyên</option></select></div>
+      <div><label>Năm dự toán</label><select id="m-year"><option value="2024">2024</option><option value="2025" selected="">2025</option><option value="2026">2026</option></select></div>
     </div>
-    <button class="btn-run" id="btn2" onclick="run2()">⚡ BÓC KHỐI LƯỢNG & LẬP DỰ TOÁN</button>
+    <button class="btn-run" id="btn2" onclick="run2()">⚡ BÓC KHỐI LƯỢNG &amp; LẬP DỰ TOÁN</button>
     <div class="err" id="err2"></div>
     <div class="prog" id="prog2">
       <div class="ps" id="ms1"><div class="pdot"></div>Phân tích mô tả công trình...</div>
@@ -260,11 +261,11 @@ select option{background:var(--s2);}
       <div class="ps" id="ms5"><div class="pdot"></div>Xuất bảng kết quả...</div>
     </div>
     <div class="res" id="res2">
-      <div class="res-hdr"><div class="res-ttl">📊 KẾT QUẢ BÓC KHỐI LƯỢNG & DỰ TOÁN</div><div style="display:flex;gap:8px"><button class="btn-sm" onclick="cpTbl('tb2')">📋 Copy</button><button class="btn-sm pri" onclick="exXL(2)">📥 Xuất Excel</button></div></div>
+      <div class="res-hdr"><div class="res-ttl">📊 KẾT QUẢ BÓC KHỐI LƯỢNG &amp; DỰ TOÁN</div><div style="display:flex;gap:8px"><button class="btn-sm" onclick="cpTbl(&#39;tb2&#39;)">📋 Copy</button><button class="btn-sm pri" onclick="exXL(2)">📥 Xuất Excel</button></div></div>
       <div class="sumgrid" id="sg2"></div>
       <div class="costbox" id="cb2"></div>
       <div class="tblwrap"><table class="tbl" id="t2"><thead><tr><th>STT</th><th>Hạng mục</th><th>Danh mục</th><th>Thông số KT</th><th>Khối lượng</th><th>ĐV</th><th>Đ.giá VL</th><th>Đ.giá NC</th><th>Thành tiền</th><th>Tin cậy</th></tr></thead><tbody id="tb2"></tbody></table></div>
-      <div class="noteslbl">⚠ LƯU Ý & KIẾN NGHỊ</div><div class="notesbox" id="nb2"></div>
+      <div class="noteslbl">⚠ LƯU Ý &amp; KIẾN NGHỊ</div><div class="notesbox" id="nb2"></div>
     </div>
   </div>
 </div>
@@ -403,7 +404,7 @@ function rmFile(){uF=null;uB=null;uT=null;document.getElementById('fprev').class
 
 // ── AI ───────────────────────────────────────────────
 async function callAI(sys,content){
-  const r=await fetch('https://bfnitiucjplvikrhquve.supabase.co/functions/v1/claude-proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content}]})});
+  const r=await fetch('https://bfnitiucjplvikrhquve.supabase.co/functions/v1/claude-proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:sys,messages:[{role:'user',content}]})});
   const d=await r.json();if(d.error)throw new Error(d.error.message);
   return d.content.map(b=>b.text||'').join('');
 }
@@ -461,5 +462,6 @@ async function run2(){
 function cpTbl(id){const t=document.getElementById(id);if(!t)return;const rows=t.closest('table').querySelectorAll('tr');const txt=Array.from(rows).map(r=>Array.from(r.querySelectorAll('th,td')).map(c=>c.innerText.trim()).join('\t')).join('\n');navigator.clipboard.writeText(txt).then(()=>alert('✓ Đã copy! Paste vào Excel nhé.'));}
 function exXL(n){const tbody=document.getElementById('tb'+n);if(!tbody||!tbody.children.length){alert('Chưa có dữ liệu!');return;}const hd=['STT','Hạng mục','Danh mục','Thông số KT','Khối lượng','ĐV','Đ.giá VL','Đ.giá NC','Thành tiền','Tin cậy'];const rows=Array.from(tbody.querySelectorAll('tr')).map(r=>Array.from(r.querySelectorAll('td')).map((td,i)=>{const c=td.querySelector('.cnum');return c?c.innerText:td.innerText.trim();}));const csv=[hd,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));a.download='StructAI-DuToan-'+new Date().toLocaleDateString('vi').replace(/\//g,'-')+'.csv';a.click();}
 </script>
-</body>
-</html>
+
+
+</body></html>

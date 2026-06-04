@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0059)file:///C:/Users/HP/Downloads/structai-tool-supabase_2.html -->
+<!-- saved from url=(0059)file:///C:/Users/HP/Downloads/structai-tool-supabase_3.html -->
 <html lang="vi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StructAI — Bóc Khối Lượng &amp; Dự Toán</title>
-<link href="./StructAI — Bóc Khối Lượng &amp; Dự Toán_files/css2" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root{--bg:#0b0c0b;--s1:#111311;--s2:#181a18;--s3:#1f221f;--border:#272b27;--green:#3ddc84;--green2:#2cb870;--greendim:#1a4d30;--yellow:#f5c842;--red:#ff5f5f;--blue:#5b9cf6;--text:#dfe8df;--muted:#4a5a4a;--mono:'JetBrains Mono',monospace;--body:'Nunito',sans-serif;--display:'Bebas Neue',sans-serif;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -172,7 +172,7 @@ select option{background:var(--s2);}
     <input class="lic-inp" id="lic-key" placeholder="SP-XXXX-XXXX-XXXX" maxlength="20" oninput="fmtKey(this)" onkeydown="if(event.key===&#39;Enter&#39;)activate()">
     <div class="lic-err" id="lic-err"></div>
     <button class="lic-btn" id="lic-btn" onclick="activate()">⚡ KÍCH HOẠT</button>
-    <div class="lic-note">Chưa có key? Liên hệ <a href="file:///C:/Users/HP/Downloads/structai-tool-supabase_2.html#">Zalo hỗ trợ</a> để đăng ký.<br>License chỉ hoạt động trên <strong style="color:var(--text)">1 thiết bị cố định</strong>.</div>
+    <div class="lic-note">Chưa có key? Liên hệ <a href="file:///C:/Users/HP/Downloads/structai-tool-supabase_3.html#">Zalo hỗ trợ</a> để đăng ký.<br>License chỉ hoạt động trên <strong style="color:var(--text)">1 thiết bị cố định</strong>.</div>
     <div class="lic-fp"><div class="lic-fp-lbl">Mã thiết bị</div><div class="lic-fp-val" id="fp-val">629E638A</div></div>
   </div>
 </div>
@@ -420,12 +420,15 @@ function safeJSON(raw){
 
 function buildSys(ct,kc,detail,region,year){
   const rL={hn:'Hà Nội & miền Bắc',hcm:'HCM & miền Nam','mien-trung':'Miền Trung','tay-nguyen':'Tây Nguyên'}[region]||region;
-  return `Bạn là kỹ sư dự toán 15 năm kinh nghiệm bóc khối lượng và lập dự toán công trình công nghiệp Việt Nam.
-Loại: ${ct} | Kết cấu: ${kc} | Mức: ${detail} | Khu vực: ${rL} | Năm: ${year}
-Đơn giá tham khảo ${rL} ${year}: Thép kết cấu VL 22-28k/kg NC 2.5-3.5k/kg; BT M300 VL 1.35-1.5tr/m³ NC 350-450k/m³; Tôn mái VL 180-250k/m² NC 45-65k/m²; Nền BT VL 850-950k/m³ NC 200-280k/m³; Cọc D400 VL 550-700k/m NC 180-250k/m.
-Trả về JSON không markdown:
-{"summary":[{"label":"Tổng diện tích","value":"...","unit":"m²"},{"label":"KL thép","value":"...","unit":"tấn"},{"label":"KL bê tông","value":"...","unit":"m³"},{"label":"Số hạng mục","value":"...","unit":"hạng mục"}],"totalVL":0,"totalNC":0,"totalCost":0,"items":[{"name":"...","category":"Kết cấu thép|Bê tông|Hoàn thiện|Nền móng|Mái|Khác","spec":"...","quantity":"...","unit":"...","priceVL":0,"priceNC":0,"total":0,"confidence":"85"}],"notes":"..."}
-Bóc đầy đủ: móng cọc, đài móng, cột, kèo, xà gồ mái, xà gồ tường, mái, tường bao, nền, thoát nước, cửa.`;
+  return `You are a construction cost estimator. Respond ONLY with a single valid JSON object. No markdown, no text before or after, no backticks, no explanation. Only JSON.
+
+Context: ${ct}, ${kc}, ${detail}, ${rL}, year ${year}
+Unit prices (VND): Steel VL 22000-28000/kg NC 2500-3500/kg; Concrete M300 VL 1350000-1500000/m3 NC 350000-450000/m3; Roof sheet VL 180000-250000/m2 NC 45000-65000/m2; Floor VL 850000-950000/m3 NC 200000-280000/m3; Pile D400 VL 550000-700000/m NC 180000-250000/m.
+
+Required JSON format:
+{"summary":[{"label":"Tổng diện tích","value":"7200","unit":"m²"},{"label":"KL thép","value":"85","unit":"tấn"},{"label":"KL bê tông","value":"320","unit":"m³"},{"label":"Số hạng mục","value":"12","unit":"hạng mục"}],"totalVL":1200000000,"totalNC":180000000,"totalCost":1380000000,"items":[{"name":"Móng cọc BTCT D400","category":"Nền móng","spec":"D400 sâu 12m","quantity":"48","unit":"m","priceVL":625000,"priceNC":215000,"total":40320000,"confidence":"82"}],"notes":"Ghi chú kỹ thuật"}
+
+Include items for: móng cọc, đài móng, cột thép, kèo thép, xà gồ mái, xà gồ tường, mái tôn, tường bao, nền BTCT, hệ thoát nước, cửa chính, cửa sổ.`;
 }
 
 function sPS(id,st){const e=document.getElementById(id);if(!e)return;e.classList.remove('act','don');e.classList.add(st);}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0059)file:///C:/Users/HP/Downloads/structai-tool-supabase_1.html -->
+<!-- saved from url=(0059)file:///C:/Users/HP/Downloads/structai-tool-supabase_2.html -->
 <html lang="vi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -172,7 +172,7 @@ select option{background:var(--s2);}
     <input class="lic-inp" id="lic-key" placeholder="SP-XXXX-XXXX-XXXX" maxlength="20" oninput="fmtKey(this)" onkeydown="if(event.key===&#39;Enter&#39;)activate()">
     <div class="lic-err" id="lic-err"></div>
     <button class="lic-btn" id="lic-btn" onclick="activate()">⚡ KÍCH HOẠT</button>
-    <div class="lic-note">Chưa có key? Liên hệ <a href="file:///C:/Users/HP/Downloads/structai-tool-supabase_1.html#">Zalo hỗ trợ</a> để đăng ký.<br>License chỉ hoạt động trên <strong style="color:var(--text)">1 thiết bị cố định</strong>.</div>
+    <div class="lic-note">Chưa có key? Liên hệ <a href="file:///C:/Users/HP/Downloads/structai-tool-supabase_2.html#">Zalo hỗ trợ</a> để đăng ký.<br>License chỉ hoạt động trên <strong style="color:var(--text)">1 thiết bị cố định</strong>.</div>
     <div class="lic-fp"><div class="lic-fp-lbl">Mã thiết bị</div><div class="lic-fp-val" id="fp-val">629E638A</div></div>
   </div>
 </div>
@@ -404,9 +404,18 @@ function rmFile(){uF=null;uB=null;uT=null;document.getElementById('fprev').class
 
 // ── AI ───────────────────────────────────────────────
 async function callAI(sys,content){
-  const r=await fetch('https://bfnitiucjplvikrhquve.supabase.co/functions/v1/claude-proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,system:sys,messages:[{role:'user',content}]})});
+  const r=await fetch('https://bfnitiucjplvikrhquve.supabase.co/functions/v1/claude-proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,system:sys,messages:[{role:'user',content}]})});
   const d=await r.json();if(d.error)throw new Error(d.error.message);
   return d.content.map(b=>b.text||'').join('');
+}
+
+function safeJSON(raw){
+  try{return JSON.parse(raw);}catch(e){}
+  const m=raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if(m){try{return JSON.parse(m[1].trim());}catch(e){}}
+  const start=raw.indexOf('{');const end=raw.lastIndexOf('}');
+  if(start>=0&&end>start){try{return JSON.parse(raw.slice(start,end+1));}catch(e){}}
+  throw new Error('Không parse được JSON: '+raw.slice(0,100));
 }
 
 function buildSys(ct,kc,detail,region,year){
@@ -442,7 +451,7 @@ async function run1(){
   else{content=`Bóc KL + dự toán điển hình: ${ct}, kết cấu ${kc}, 60x120m cao 9m.`;}
   btn.disabled=true;document.getElementById('prog1').classList.add('on');document.getElementById('res1').classList.remove('on');
   const ids=['s1','s2','s3','s4','s5','s6'];const pp=animP(ids,5000);
-  try{const raw=await callAI(buildSys(ct,kc,detail,region,year),content);await pp;ids.forEach(id=>sPS(id,'don'));const data=JSON.parse(raw.replace(/```json|```/g,'').trim());render(data,'sg1','tb1','nb1','cb1');document.getElementById('res1').classList.add('on');await incUse();}
+  try{const raw=await callAI(buildSys(ct,kc,detail,region,year),content);await pp;ids.forEach(id=>sPS(id,'don'));const data=safeJSON(raw);render(data,'sg1','tb1','nb1','cb1');document.getElementById('res1').classList.add('on');await incUse();}
   catch(e){await pp;const err=document.getElementById('err1');err.textContent='❌ '+(e.message||'Lỗi API.');err.classList.add('on');}
   btn.disabled=false;
 }
@@ -454,7 +463,7 @@ async function run2(){
   const ct=document.getElementById('m-ct').value,kc=document.getElementById('m-kc').value,detail=document.getElementById('m-detail').value,region=document.getElementById('m-region').value,year=document.getElementById('m-year').value;
   btn.disabled=true;document.getElementById('prog2').classList.add('on');document.getElementById('res2').classList.remove('on');
   const ids=['ms1','ms2','ms3','ms4','ms5'];const pp=animP(ids,4500);
-  try{const raw=await callAI(buildSys(ct,kc,detail,region,year),desc);await pp;ids.forEach(id=>sPS(id,'don'));const data=JSON.parse(raw.replace(/```json|```/g,'').trim());render(data,'sg2','tb2','nb2','cb2');document.getElementById('res2').classList.add('on');await incUse();}
+  try{const raw=await callAI(buildSys(ct,kc,detail,region,year),desc);await pp;ids.forEach(id=>sPS(id,'don'));const data=safeJSON(raw);render(data,'sg2','tb2','nb2','cb2');document.getElementById('res2').classList.add('on');await incUse();}
   catch(e){await pp;const err=document.getElementById('err2');err.textContent='❌ '+(e.message||'Lỗi API.');err.classList.add('on');}
   btn.disabled=false;
 }

@@ -403,7 +403,7 @@ function rmFile(){uF=null;uB=null;uT=null;document.getElementById('fprev').class
 
 // ── AI ───────────────────────────────────────────────
 async function callAI(sys,content){
-  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content}]})});
+  const r=await fetch('https://bfnitiucjplvikrhquve.supabase.co/functions/v1/claude-proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:[{role:'user',content}]})});
   const d=await r.json();if(d.error)throw new Error(d.error.message);
   return d.content.map(b=>b.text||'').join('');
 }
